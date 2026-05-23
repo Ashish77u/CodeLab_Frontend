@@ -9,6 +9,14 @@
 
 **A modern, dark-themed source code marketplace built with React 18 + Vite.**
 
+![alt text](login_page.png)
+![alt text](register_page.png) 
+![alt text](landing_page-1.png) 
+![alt text](project_section.png) 
+![alt text](project_detailsPage.png) 
+![alt text](comments_commigSoon.png) 
+![alt text](contact_page.png)
+
 [Live Demo](https://codelab-frontend-hjey74uob-lucicore0001-7739s-projects.vercel.app) · [Backend Repo](https://github.com/Ashish77u/CodeLab_Backend) · [API Docs](https://codelab-backend-l36z.onrender.com/swagger-ui.html)
 
 </div>
