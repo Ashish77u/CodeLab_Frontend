@@ -13,4 +13,15 @@ export const authApi = {
     const res = await api.post('/auth/refresh-token', { refreshToken })
     return res.data
   },
+
+//   verifyEmail: async (token) => {
+//   return await api.get(`/auth/verify-email?token=${token}`)
+// },
+
+verifyEmail: async (token) => {
+  const res = await api.get(`/auth/verify-email?token=${token}`)
+  return res.data
+},
+
+
 }

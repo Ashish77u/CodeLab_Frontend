@@ -65,33 +65,43 @@ export default function Navbar() {
         </div>
       </Link>
 
+
       {/* Nav links */}
-      <div style={{
-        display: 'flex', alignItems: 'left', gap: 4,
-        flexShrink: 0,
-      }}>
-        {[
-          { label: 'Home', path: '/' },
-          { label: 'Project', path: '/projects' },
-          { label: 'Contact', path: '/contact' },
-        ].map(item => (
-          <Link key={item.path} to={item.path} style={{
-            padding: '6px 12px',
-            borderRadius: 6,
-            textDecoration: 'none',
-            fontSize: 13,
-            fontFamily: 'DM Sans, sans-serif',
-            color: isActive(item.path) ? '#e6edf3' : '#7d8590',
-            background: isActive(item.path) ? '#21262d' : 'transparent',
-            transition: 'all 0.15s',
-          }}
-            onMouseEnter={e => e.target.style.color = '#e6edf3'}
-            onMouseLeave={e => e.target.style.color = isActive(item.path) ? '#e6edf3' : '#7d8590'}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </div>
+
+      {/* // Change Project link to scroll behavior */}
+
+<nav style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+  <Link to="/" style={{ color: '#7d8590', fontSize: 14, textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>
+    Home
+  </Link>
+
+  {/* Project — scrolls to project section on landing page */}
+  <Link
+    onClick={() => {
+      if (window.location.pathname === '/') {
+        // Already on landing page — just scroll
+        document.getElementById('projects-section')
+          ?.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        // On another page — go to landing page then scroll
+        window.location.href = '/#projects-section'
+      }
+    }}
+    style={{
+      color: '#7d8590', fontSize: 14,
+      fontFamily: 'DM Sans, sans-serif',
+      cursor: 'pointer',
+    }}
+  >
+    Projects
+  </Link>
+
+  {/* Contact — goes to contact page */}
+  <Link to="/contact" style={{ color: '#7d8590', fontSize: 14, textDecoration: 'none', fontFamily: 'DM Sans, sans-serif' }}>
+    Contact
+  </Link>
+
+</nav>
 
       {/* Search bar */}
       <form onSubmit={handleSearch} style={{ flex: 1, maxWidth: 320 }}>
@@ -215,3 +225,10 @@ export default function Navbar() {
     </nav>
   )
 }
+
+
+
+
+
+
+

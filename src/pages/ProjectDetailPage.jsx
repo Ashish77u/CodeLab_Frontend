@@ -5,6 +5,8 @@ import { useQuery } from '@tanstack/react-query'
 import { projectApi } from '../api/projectApi'
 import { useAuthStore } from '../store/authStore'
 import toast from 'react-hot-toast'
+import ReactMarkdown from 'react-markdown';
+
 
 const CodePreview = () => (
   <div style={{
@@ -311,13 +313,52 @@ export default function ProjectDetailPage() {
           </div>
 
           {/* Description / About */}
-          <div style={{
+          {/* <div style={{
             fontSize: 14, color: '#7d8590',
             lineHeight: 1.85, marginBottom: 28,
             fontFamily: 'DM Sans, sans-serif',
+            whiteSpace: 'pre-line',   
+            wordBreak: 'break-word'  
+
+              
           }}>
             {project.about || project.description}
+          </div> */}
+
+  
+                    
+          {/* Description / About */}
+          <div style={{
+            fontSize: 14, 
+            color: '#7d8590',
+            lineHeight: 1.85, 
+            marginBottom: 28,
+            fontFamily: 'DM Sans, sans-serif',
+            wordBreak: 'break-word'
+          }}>
+            <ReactMarkdown 
+              components={{
+                // Custom styling for elements parsed inside the Markdown text
+                p: ({...props}) => <p style={{ margin: '0 0 16px 0', whiteSpace: 'pre-line' }} {...props} />,
+                h1: ({...props}) => <h1 style={{ color: '#e6edf3', fontSize: '20px', margin: '20px 0 10px 0' }} {...props} />,
+                h2: ({...props}) => <h2 style={{ color: '#e6edf3', fontSize: '18px', margin: '16px 0 8px 0' }} {...props} />,
+                ul: ({...props}) => <ul style={{ paddingLeft: '20px', marginBottom: '16px' }} {...props} />,
+                li: ({...props}) => <li style={{ marginBottom: '4px' }} {...props} />,
+                code: ({inline, ...props}) => (
+                  <code style={{ 
+                    background: '#21262d', 
+                    padding: '2px 6px', 
+                    borderRadius: '4px', 
+                    fontFamily: 'monospace', 
+                    color: '#ff79c6' 
+                  }} {...props} />
+                )
+              }}
+            >
+              {project.about || project.description}
+            </ReactMarkdown>
           </div>
+
 
           {/* Download section */}
           <div style={{
@@ -507,7 +548,7 @@ export default function ProjectDetailPage() {
                 fontSize: 22, fontWeight: 800,
                 color: '#e6edf3', marginBottom: 8,
               }}>
-                Ready to sell your code?
+                Ready to upload your code?
               </h2>
               <p style={{
                 color: '#7d8590', fontSize: 13,
@@ -544,157 +585,4 @@ export default function ProjectDetailPage() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-// --------------------------------------------------------------
-// import { useState } from 'react'
-// import { useParams, Link } from 'react-router-dom'
-// import { useQuery } from '@tanstack/react-query'
-// import { projectApi } from '../api/projectApi'
-// import { useAuthStore } from '../store/authStore'
-// import Spinner from '../components/common/Spinner'
-// import toast from 'react-hot-toast'
-
-// export default function ProjectDetailPage() {
-//   const { id } = useParams()
-//   const { isAuthenticated } = useAuthStore()
-//   const [downloading, setDownloading] = useState(false)
-//   const baseUrl = import.meta.env.VITE_BASE_URL
-
-//   const { data: project, isLoading, isError } = useQuery({
-//     queryKey: ['project', id],
-//     queryFn: () => projectApi.getById(id),
-//   })
-
-//   const handleDownload = async () => {
-//     if (!isAuthenticated) {
-//       toast.error('Please login to download')
-//       return
-//     }
-//     setDownloading(true)
-//     try {
-//       await projectApi.download(project.id, project.zipFileName)
-//       toast.success('Download started!')
-//     } catch {
-//       toast.error('Download failed')
-//     } finally {
-//       setDownloading(false)
-//     }
-//   }
-
-//   if (isLoading) return (
-//     <div style={{ display: 'flex', justifyContent: 'center', padding: 80 }}>
-//       <Spinner size={40} />
-//     </div>
-//   )
-
-//   if (isError) return (
-//     <div style={{ textAlign: 'center', color: '#ff4444', padding: 80 }}>
-//       Project not found
-//     </div>
-//   )
-
-//   return (
-//     <div style={{ maxWidth: 860, margin: '0 auto', padding: '40px 24px' }}>
-
-//       {project.coverImageUrl && (
-//         <div style={{
-//           height: 300, borderRadius: 16, overflow: 'hidden',
-//           marginBottom: 32, border: '1px solid #1a1a2e'
-//         }}>
-//           <img src={`${baseUrl}${project.coverImageUrl}`} alt={project.title}
-//             style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-//         </div>
-//       )}
-
-//       <h1 style={{
-//         fontFamily: 'Syne, sans-serif', fontSize: 36,
-//         fontWeight: 800, color: '#e8e8f0', marginBottom: 12
-//       }}>
-//         {project.title}
-//       </h1>
-
-//       <Link to={`/profile/${project.uploaderUsername}`} style={{
-//         display: 'inline-flex', alignItems: 'center', gap: 8,
-//         textDecoration: 'none', marginBottom: 16,
-//       }}>
-//         <div style={{
-//           width: 28, height: 28, borderRadius: '50%',
-//           background: 'linear-gradient(135deg,#00ff88,#00ccff)',
-//           display: 'flex', alignItems: 'center', justifyContent: 'center',
-//           fontSize: 12, fontWeight: 700, color: '#000'
-//         }}>
-//           {project.uploaderUsername?.[0]?.toUpperCase()}
-//         </div>
-//         <span style={{ color: '#556', fontSize: 14 }}>
-//           @{project.uploaderUsername}
-//         </span>
-//       </Link>
-
-//       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
-//         {project.tags?.map(tag => (
-//           <span key={tag} style={{
-//             padding: '3px 10px', background: '#111120',
-//             border: '1px solid #2a2a3a', borderRadius: 12,
-//             fontSize: 11, color: '#556'
-//           }}>{tag}</span>
-//         ))}
-//       </div>
-
-//       <div style={{ display: 'flex', gap: 20, fontSize: 13, color: '#444', marginBottom: 24 }}>
-//         <span>↓ {project.downloadCount} downloads</span>
-//         <span>📅 {new Date(project.createdAt).toLocaleDateString()}</span>
-//       </div>
-
-//       <button onClick={handleDownload} disabled={downloading} style={{
-//         padding: '12px 32px', marginBottom: 36,
-//         background: downloading ? '#1a1a2e' : '#00ff88',
-//         border: 'none', borderRadius: 8,
-//         color: downloading ? '#555' : '#000',
-//         fontSize: 15, fontWeight: 700, cursor: 'pointer',
-//         fontFamily: 'DM Sans, sans-serif',
-//       }}>
-//         {downloading ? 'Downloading...' : '↓ Download ZIP'}
-//       </button>
-
-//       <div style={{
-//         background: '#0d0d1a', border: '1px solid #1a1a2e',
-//         borderRadius: 12, padding: 28, marginBottom: 20
-//       }}>
-//         <h2 style={{
-//           fontFamily: 'Syne, sans-serif', fontSize: 18,
-//           fontWeight: 700, color: '#e8e8f0', marginBottom: 14
-//         }}>Description</h2>
-//         <p style={{ color: '#778', fontSize: 14, lineHeight: 1.8 }}>
-//           {project.description}
-//         </p>
-//       </div>
-
-//       {project.about && (
-//         <div style={{
-//           background: '#0d0d1a', border: '1px solid #1a1a2e',
-//           borderRadius: 12, padding: 28
-//         }}>
-//           <h2 style={{
-//             fontFamily: 'Syne, sans-serif', fontSize: 18,
-//             fontWeight: 700, color: '#e8e8f0', marginBottom: 14
-//           }}>About</h2>
-//           <p style={{ color: '#778', fontSize: 14, lineHeight: 1.8 }}>
-//             {project.about}
-//           </p>
-//         </div>
-//       )}
-//     </div>
-//   )
-// }
-
+ 

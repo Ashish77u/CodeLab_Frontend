@@ -1,14 +1,8 @@
-// /    ------------------------------ third change 
-// src/pages/LandingPage.jsx
-
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { projectApi } from '../api/projectApi'
 import { useAuthStore } from '../store/authStore'
-import { useLocation } from 'react-router-dom'
-
-
 
 // const CATEGORIES = ['All', 'Templates', 'APIs', 'Frontend', 'Backend', 'Full Apps', 'Figma']
 
@@ -32,11 +26,6 @@ const CodePreview = () => (
   </div>
 )
 
-
-
-
- 
-
 export default function LandingPage() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [searchInput, setSearchInput] = useState('')
@@ -45,19 +34,6 @@ export default function LandingPage() {
   const { isAuthenticated } = useAuthStore()
   const navigate = useNavigate()
   const PAGE_SIZE = 12
-  const location = useLocation()
-
-
-   // Scroll to projects section if URL has #projects-section
-  useEffect(() => {
-    if (location.hash === '#projects-section') {
-      setTimeout(() => {
-        document.getElementById('projects-section')
-          ?.scrollIntoView({ behavior: 'smooth' })
-      }, 500) // wait for page to load
-    }
-  }, [location])
-
 
   // Fetch all tags dynamically from backend
   const { data: tagsData } = useQuery({
@@ -70,7 +46,7 @@ export default function LandingPage() {
   const CATEGORIES = ['All', ...(tagsData || [])]
 
   // Fetch projects — filtered by search OR active category tag
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['projects', page, search, activeCategory],
     queryFn: () => {
       if (search) return projectApi.search(search, page, PAGE_SIZE)
@@ -79,22 +55,9 @@ export default function LandingPage() {
     },
     keepPreviousData: true,
   })
- 
-const { data: countData, isLoading: countLoading } = useQuery({
-  queryKey: ['projects-count'],
-  queryFn: () => projectApi.getAll(0, 1),
-  staleTime: 1000 * 60 * 5,
-})
-
-const totalProjects =
-  countData?.page?.totalElements
-  ?? data?.page?.totalElements
-  ?? 0
-
-const anyLoading = isLoading || countLoading
 
   // Real total project count for hero badge
-  // const totalProjects = data?.totalElements || 0
+  const totalProjects = data?.totalElements || 0
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -164,14 +127,7 @@ const anyLoading = isLoading || countLoading
           }} />
           Over{' '}
           <span style={{ color: '#00ff88', fontWeight: 700 }}>
-            {/* {totalProjects > 0 ? totalProjects.toLocaleString() : '...'} */}
-            {/* {isLoading ? '...' : totalProjects > 0 ? totalProjects.toLocaleString() : '0'} */}
-            {/* {totalProjects > 0 ? totalProjects.toLocaleString() : isLoading ? '...' : '0'} */}
-            {/* {anyLoading ? '...' : totalProjects > 0 ? totalProjects.toLocaleString() : '0'} */}
-              {anyLoading ? '...' : totalProjects.toLocaleString()}
-
-
-
+            {totalProjects > 0 ? totalProjects.toLocaleString() : '...'}
           </span>
           + source code projects available
         </div>
@@ -198,7 +154,7 @@ const anyLoading = isLoading || countLoading
           maxWidth: 520, margin: '0 auto 40px',
           lineHeight: 1.7, fontFamily: 'DM Sans, sans-serif',
         }}>
-          Upload and download production-ready code. Templates, components, full apps, and APIs — built by developers, for developers.
+          Buy and sell production-ready code. Templates, components, full apps, and APIs — built by developers, for developers.
         </p>
 
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -331,27 +287,6 @@ const anyLoading = isLoading || countLoading
             Failed to load projects. Make sure backend is running on port 8080.
           </div>
         )}
-
-        {/* {isError && (
-  <div style={{
-    textAlign: 'center', color: '#f85149',
-    padding: 40, fontSize: 14,
-    fontFamily: 'DM Sans, sans-serif',
-  }}>
-    <p>Failed to load projects.</p>
-    <p style={{ fontSize: 12, color: '#7d8590', marginTop: 8 }}>
-      Error: {error?.response?.data?.message
-        || error?.message
-        || error?.userMessage
-        || 'Unknown error'}
-    </p>
-    <p style={{ fontSize: 11, color: '#444', marginTop: 4 }}>
-      Status: {error?.response?.status || 'No response'}
-    </p>
-  </div>
-)} */}
-
-
 
         {/* Project Grid */}
         {data && !isLoading && (
@@ -603,6 +538,3 @@ function ProjectCard({ project }) {
     </Link>
   )
 }
-
-
- 

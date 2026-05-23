@@ -13,6 +13,13 @@ import ProfilePage       from './pages/ProfilePage'
 import UploadProjectPage from './pages/UploadProjectPage'
 import OAuthCallbackPage from './pages/OAuthCallbackPage'
 
+import ContactPage from './pages/ContactPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
+
+import VerificationBanner from './components/VerificationBanner'
+
+
+
 function App() {
 
   const [loading, setLoading] = useState(true)
@@ -37,6 +44,8 @@ function App() {
       flexDirection: 'column', background: '#0a0a0f'
     }}>
       <Navbar />
+          <VerificationBanner />   {/* ← add here */}
+
 
       <main style={{ flex: 1 }}>
         <Routes>
@@ -46,6 +55,13 @@ function App() {
           <Route path="/projects/:id" element={<ProjectDetailPage />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/oauth2/callback" element={<OAuthCallbackPage />} />
+
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+
+
+
+
 
           <Route
             path="/upload"
